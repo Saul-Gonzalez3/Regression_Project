@@ -154,7 +154,12 @@ def new_zillow_data(SQL_query):
     return pd.read_sql(SQL_query, url)
 #------------------------------------------------------------------------------
 def scale_data(train, validate, test):
-
+    """
+    This function will:
+    - take in train, validate, and test data
+    - scale columns
+    - return a df of scaled data
+    """
     import sklearn
     from sklearn.preprocessing import MinMaxScaler
     
@@ -183,32 +188,7 @@ def scale_data(train, validate, test):
     
     return train, validate, test
     
-    
-#----------------------------------------------------------------------------------------------------------------------------------   
-    
-def Qscale_data(train, validate, test):  
-    
-    import sklearn
-    from sklearn.preprocessing import QuantileTransformer
-    
-    #Create the object
-    scaler = sklearn.preprocessing.QuantileTransformer(output_distribution='normal')
-    
-    #Fit the object
-    scaler.fit(train[['Bedroom_Count', 'Bathroom_Count', 'Finished_sqft', 'Tax_value_dollars', 'Tax_amount', 'Year_built']])
-    
-    #Use the object
-    scaled_columns = scaler.transform(train[['Bedroom_Count', 'Bathroom_Count', 'Finished_sqft', 'Tax_value_dollars', 'Tax_amount', 'Year_built']])
-    
-    #Add the newly scaled columns (with the 'Scaled' names) to train
-    train[['Bedroom_Count_Scaled', 'Bathroom_Count_Scaled', 'Finished_sqft_Scaled', 'Tax_value_dollars_Scaled', 'Tax_amount_Scaled', 'Year_built_Scaled']] = scaled_columns
 
-    #Make new scaled columns with the newly scaled columns (with the 'Scaled' names) to validate and test
-
-    validate[['Bedroom_Count_Scaled', 'Bathroom_Count_Scaled', 'Finished_sqft_Scaled', 'Tax_value_dollars_Scaled', 'Tax_amount_Scaled', 'Year_built_Scaled']] = scaler.transform(validate[['Bedroom_Count', 'Bathroom_Count', 'Finished_sqft', 'Tax_value_dollars', 'Tax_amount', 'Year_built']])
-    test[['Bedroom_Count_Scaled', 'Bathroom_Count_Scaled', 'Finished_sqft_Scaled', 'Tax_value_dollars_Scaled', 'Tax_amount_Scaled','Year_built_Scaled']] = scaler.transform(test[['Bedroom_Count', 'Bathroom_Count', 'Finished_sqft', 'Tax_value_dollars', 'Tax_amount', 'Year_built']])
-    
-    return train, validate, test
 #------------------------------------------------------------------------------
 def plot_variable_pairs(df):
     train, validate, test = split_zillow_data(df)
@@ -364,11 +344,16 @@ def XandY_train_validate_test(train, validate, test):
     return X_train_scaled, y_train_scaled, X_validate_scaled, y_validate_scaled, X_test_scaled, y_test_scaled
 #------------------------------------------------------------------------------
 def encode_data(train, validate, test):
+       """
+    This function will:
+    - take in train, validate, and test data
+    - encode the county column entries for modeling
+    - return a df with an encoded county column
+    """
     county_maps = {'LA': 1,
     'Orange': 2,
     'Ventura': 3
 }
-
     train['county'] = train.county.map(county_maps)
     validate['county'] = validate.county.map(county_maps)
     test['county'] = test.county.map(county_maps)
@@ -376,14 +361,21 @@ def encode_data(train, validate, test):
     return train, validate, test
 #------------------------------------------------------------------------------
 def eval_dist(r, p, α=0.05):
+       """
+    This function will:
+    - take in r & p
+    - return a print statement that tells whether the data is normally distributed
+    """
     if p > α:
         return print(f"""The data is normally distributed""")
     else:
         return print(f"""The data is NOT normally distributed""")
 #------------------------------------------------------------------------------
 def eval_Spearmanresult(r,p,α=0.05):
-    """
-    
+       """
+    This function will:
+    - take in r & p
+    - return a print statement that tells whether the data has a monotonic relationship.
     """
     if p < α:
         return print(f"""We reject H₀, there appears to be a monotonic relationship.
@@ -492,18 +484,3 @@ def baseline(X_train_scaled, y_train_scaled):
 
     
     return baseline
-
-
-    #------------------------------------------------------------------------------
-
-#------------------------------------------------------------------------------
-
-#------------------------------------------------------------------------------
-
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
-#------------------------------------------------------------------------------
