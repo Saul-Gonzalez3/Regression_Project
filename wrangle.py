@@ -446,8 +446,55 @@ def get_RFE(X_train_scaled,y_train):
     
     return rfe_feature, k
 #------------------------------------------------------------------------------
+def baseline(X_train_scaled, y_train_scaled):
+    # X -> set of all ind features
+    #y -> dependent variable, target
+    X = X_train_scaled
+    y = y_train_scaled
+    
+    from sklearn.linear_model import LinearRegression
 
-#------------------------------------------------------------------------------
+    #make
+    lm = LinearRegression()
+    #fit
+    lm.fit(X,y)
+    #use
+    yhat = lm.predict(X)
+    
+    from sklearn.metrics import mean_squared_error, r2_score
+    
+    baseline_med = y.median()
+    baseline_mean = y.mean()
+    
+    # compute the error on these two baselines:
+    mean_baseline_rmse = mean_squared_error(y_pred.baseline_mean, y) ** (1/2)
+    med_baseline_rmse = mean_squared_error(y_pred.baseline_med, y) ** (1/2)
+    
+    #Establish the true baseline
+    baseline = mean_baseline_rmse
+    
+    # Squared Errors, 
+    # residuals squared
+    squared_errors = (y_pred['y_act'] - y_pred['yhat']) ** 2
+    # Sum of Squared Error, 
+    sse = squared_errors.sum()
+    # Mean Squared error, 
+    mse = sse / train.shape[0] #alternatively, len(train), y_pred.shape[0]
+    # Root mean Squared Error
+    # square root the mean squared error!
+    rmse = mse**0.5
+    
+    # Squared Errors, 
+    # residuals squared
+    squared_errors_bl = (y_pred['y_act'] - y_pred['baseline_mean']) ** 2
+    # Sum of Squared Error, 
+    sse_bl = squared_errors_bl.sum()
+
+    
+    return baseline
+
+
+    #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
 
