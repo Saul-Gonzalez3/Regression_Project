@@ -54,4 +54,6 @@ Takeaways and Conclusions
 
 
 Recommendations:
-There are a lot more features that should be looked at, so my recommendation for future prediction efforts to determine home value.
+There are a lot more features that should be looked at, here is my recommendation for future prediction efforts to determine home value:
+
+Acquire as many features as possible presented in the original data and proceed to conduct Select K Best or Recursive Feature Elimination, along with personal insight,to determine which features should be fed into the modeling process. 
